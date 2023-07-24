@@ -1,90 +1,56 @@
-/*
-1. get computer choice by random
-2. get player selection by promt()
-3. go letters to lower case by toLowerCase()
-4. return the winner
-5. write a function that plays 5 rounds
-*/
+const playerSelectionDisplay = document.getElementById('player-selection')
+const computerSelectionDisplay = document.getElementById('computer-selection')
+const resultDisplay = document.getElementById('result')
+const possibleSelections = document.querySelectorAll('button')
+const scoreDisplay = document.getElementById('score')
+let playerSelection
+let computerSelection
+let result
+let score
+let player = 0
+let computer = 0
 
-let playerSelection;
-let computerSelection;
-
-let player = 0;
-let computer = 0;
-
-function getPlayerChoice() {
-    const input = window.prompt('Rock, paper or scissors?').toLowerCase();
-
-    if (input !== 'rock' && input !== 'paper' && input !== 'scissors') {
-        return getPlayerChoice();
-    } else {
-        return input;
-    }
-}
+possibleSelections.forEach(possibleSelection => possibleSelection.addEventListener('click', (e) => {
+    playerSelection = e.target.id
+    playerSelectionDisplay.innerHTML = playerSelection
+    computerSelection = getComputerChoice()
+    computerSelectionDisplay.innerHTML = computerSelection
+    result = playRound(playerSelection, computerSelection)
+    resultDisplay.innerHTML = result
+    score = `${player} : ${computer}`
+    scoreDisplay.innerHTML = score
+}))
 
 function getComputerChoice() {
-    const randomNum = Math.floor(Math.random() * 3);
+    const randomNum = Math.floor(Math.random() * 3)
     
     if (randomNum === 0) {
-        return 'rock';
+        return 'rock'
     } else if (randomNum === 1) {
-        return 'paper';
+        return 'paper'
     } else {
-        return 'scissors';
+        return 'scissors'
     }
 }
 
-/*
-rock > scissors
-scissors > paper
-paper > rock
-
-play 1 round:
-    get selections
-    check the winner
-    ++ to the winner's score
-*/
-
 function playRound(playerSelection, computerSelection) {
-    playerSelection = getPlayerChoice();
-    computerSelection = getComputerChoice();
-
-    if (playerSelection === computerSelection) {
-        return `frendship win! current score ${player} : ${computer}, ${playerSelection} vs ${computerSelection}`;
+    if (player >= 5 || computer >= 5) {
+        if (player > computer) {
+            return `Player win! The score is ${player} : ${computer}`
+        } else {
+            return `Computer win! The score is ${player} : ${computer}`
+        }
+    } else if (playerSelection === computerSelection) {
+        return 'draw!'
     } else if (
     playerSelection === 'rock' && computerSelection === 'scissors' ||
     playerSelection === 'scissors' && computerSelection === 'paper' ||
     playerSelection === 'paper' && computerSelection === 'rock'
     ) {
         player++;
-        return `you win! current score ${player} : ${computer}, ${playerSelection} beats ${computerSelection}`;
+        return 'player win!'
     } else {
         computer++;
-        return `you lose! current score ${player} : ${computer}, ${playerSelection} beats ${computerSelection}`;
+        return 'computer win!'
     }
 }
-// console.log(playRound(playerSelection, computerSelection));
-
-/*
-play 5 rounds:
-    play 1 round *5
-    compare scores
-    return the winner
-*/
-
-function game() {
-    console.log(playRound(playerSelection, computerSelection));
-    console.log(playRound(playerSelection, computerSelection));
-    console.log(playRound(playerSelection, computerSelection));
-    console.log(playRound(playerSelection, computerSelection));
-    console.log(playRound(playerSelection, computerSelection));
-
-    if (player === computer) {
-        return `frendship win! the score ${player} : ${computer}`;
-    } else if (player > computer) {
-        return `you win! the score ${player} : ${computer}`;
-    } else {
-        return `you lose! the score ${player} : ${computer}`;
-    }
-}
-console.log(game());
